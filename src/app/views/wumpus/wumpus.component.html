@@ -1,0 +1,137 @@
+<div class="container-fluid pt-5">
+  <div class="row p-5" *ngIf="isInit && isFinished">
+    <div class="alert alert-success" role="alert">
+        Felicidades as Ganado Pulsa en RESTART para volver a jugar!
+    </div>
+  </div>
+  <div class="row p-5" *ngIf="isInit && !isAlive">
+    <div class="alert alert-danger" role="alert">
+        Lo sentimos Game Over!
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-8" [ngClass]="{'d-none': !isInit}">
+      <div class="card card-game">
+        <div class="card-content">
+          <canvas #canvas width="490" height="490"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card card-body">
+        <div class="row" *ngIf="isInit">
+          <div class="tab-pane fade show active mt-4">
+            <p>
+              <img src="../../../assets/img/score-icon.png" width="16px" />
+              <span class="pl-2">Score</span>:
+              <span>{{ score }}</span>
+            </p>
+            <p>
+              <img src="../../../assets/img/arrow-icon.png" width="16px" />
+              <span class="pl-2">Arrow</span>:
+              <span>{{ arrow }}</span>
+            </p>
+            <p>
+              <img src="../../../assets/img/gold-icon.png" width="16px" />
+              <span class="pl-2">Remaining Golds</span>:
+              <span>{{ golds }}</span>
+            </p>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="true"
+                id="btn-remove-walls"
+                (change)="removeWalls($event)"
+              />
+              <label class="form-check-label" for="btn-remove-walls"
+                >Remove Walls</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row"  *ngIf="!isInit">
+            <h3>WUMPUS GAME</h3>
+            <p class="font-weight-bold">
+                Instruciones para jugar debe configurar el numero de filas y de columnas
+                para crear el tablero dinamico siendo el minimo de 5x5 , 
+                el minimo flechas , oro y wumpus es de uno ,
+                si todo en correcto el boton para iniciar se habilitara,para tomar el oro 
+                se debe precionar la tecla enter , y para moverse se utilizan las flechas de teclado , 
+                para matar a los wumpus se preciona la tecla espacio para arrojar las flechas, 
+                el juego acaba cuando se tome la cantidad de oro en el tablero.
+            </p>
+        </div>
+        <div class="row mt-5 p-2" *ngIf="!isInit">
+            <form [formGroup]="myForm">
+                <div class="form-group row">
+                  <label  class="col-3 col-form-label">Colums</label>
+                  <div class="col-7">
+                    <input type="number" 
+                     [ngClass]="{'is-valid': myForm.get('colums')!.valid}"
+                     min="1"(keydown)="isNumberKey($event)"  
+                     formControlName="colums"
+                     class="form-control form-control-sm" 
+                     placeholder="Colums">
+                  </div>
+                  
+                </div>
+                <div class="form-group row">
+                  <label  class="col-3 col-form-label">Rows</label>
+                  <div class="col-7">
+                    <input 
+                    [ngClass]="{'is-valid': myForm.get('rows')!.valid}"
+                    type="number" min="1"(keydown)="isNumberKey($event)" formControlName="rows"
+                    class="form-control form-control-sm" placeholder="Rows">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label  class="col-3 col-form-label">Arrow</label>
+                  <div class="col-7">
+                    <input 
+                    [ngClass]="{'is-valid': myForm.get('arrow')!.valid}"
+                    type="number" min="1"(keydown)="isNumberKey($event)" formControlName="arrow"
+                    class="form-control form-control-sm" placeholder="Arrow">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label  class="col-3 col-form-label">Gold</label>
+                  <div class="col-7">
+                    <input 
+                    [ngClass]="{'is-valid': myForm.get('gold')!.valid}"
+                    type="number" min="1"(keydown)="isNumberKey($event)" formControlName="gold"
+                    class="form-control form-control-sm" placeholder="Gold">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label  class="col-3 col-form-label">Wumpus</label>
+                  <div class="col-7">
+                    <input 
+                    [ngClass]="{'is-valid': myForm.get('wumpus')!.valid}"
+                    type="number" min="1"(keydown)="isNumberKey($event)" formControlName="wumpus"
+                    class="form-control form-control-sm" placeholder="Wumpus">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label  class="col-3 col-form-label">Holes</label>
+                  <div class="col-7">
+                    <input 
+                    [ngClass]="{'is-valid': myForm.get('hole')!.valid}"
+                    type="number" min="1"(keydown)="isNumberKey($event)" formControlName="hole"
+                    class="form-control form-control-sm" placeholder="Holes">
+                  </div>
+                </div>
+            </form>
+        </div>
+        <div class="row mt-5">
+          <div class="col-3">
+            <button [disabled]="myForm.invalid"
+             type="button" class="btn btn-success" (click)="start();isInit=!isInit">
+             {{!isInit ? 'START' : 'RESTART'}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
